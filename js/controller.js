@@ -1,16 +1,15 @@
-
 let getAllBook=function(s){
 	var d;
 	$.ajax({
-	           cache: false,
-	           async: false,
-	           type: "GET",
-	           data: {  },
-	           url: `http://localhost:8081/bookapi/getallbook`,
-	           success: function (data) {
-	               d = data;
-	           }
-	       });
+	           cache: false,
+	           async: false,
+	           type: "GET",
+	           data: {  },
+	           url: `http://localhost:8081/bookapi/getallbook`,
+	           success: function (data) {
+	               d = data;
+	           }
+	       });
 	return d;					
 }
 function makebook(books){
@@ -68,15 +67,15 @@ function makebook(books){
 // 		  if(this.value='选项1'){
 // 			  // var d;
 // 			  // $.ajax({
-// 			  //            cache: false,
-// 			  //            async: false,
-// 			  //            type: "GET",
-// 			  //            data: {  },
-// 			  //            url: `http://localhost:8081/bookapi/getbookbyid?bookid=${this.input}`,
-// 			  //            success: function (data) {
-// 			  //                d = data;
-// 			  //            }
-// 			  //        });
+// 			  //            cache: false,
+// 			  //            async: false,
+// 			  //            type: "GET",
+// 			  //            data: {  },
+// 			  //            url: `http://localhost:8081/bookapi/getbookbyid?bookid=${this.input}`,
+// 			  //            success: function (data) {
+// 			  //                d = data;
+// 			  //            }
+// 			  //        });
 // 		  }else{
 // 			  console.log(ok);
 // 		  }
@@ -93,32 +92,36 @@ methods: {
 			   done();
 	      },
 		  search(){
+			  if(this.input==""){
+				this.$message.error('查询值为空');
+				this.dialogVisible = false;
+				return;
+			  }
 			  if(this.value=='1'){
 				  var d;
 				  $.ajax({
-				             cache: false,
-				             async: false,
-				             type: "GET",
-				             data: {  },
-				             url: `http://localhost:8081/bookapi/getbookbyid?bookid=${this.input}`,
-				             success: function (data) {
-				                 d = data;
-				             }
-				         });
-				  
+				             cache: false,
+				             async: false,
+				             type: "GET",
+				             data: {  },
+				             url: `http://localhost:8081/bookapi/getbookbyid?bookid=${this.input}`,
+				             success: function (data) {
+				                 d = data;
+				             }
+				         });
 				  this.tableData=makebook(d);
 			  }else if(this.value=='2'){
 				  var d;
 				  $.ajax({
-				             cache: false,
-				             async: false,
-				             type: "GET",
-				             data: {  },
-				             url: `http://localhost:8081/bookapi/getbookbyname?name=${this.input}`,
-				             success: function (data) {
-				                 d = data;
-				             }
-				         });
+				             cache: false,
+				             async: false,
+				             type: "GET",
+				             data: {  },
+				             url: `http://localhost:8081/bookapi/getbookbyname?name=${this.input}`,
+				             success: function (data) {
+				                 d = data;
+				             }
+				         });
 				  
 				  this.tableData=makebook(d);
 				  
@@ -132,22 +135,22 @@ methods: {
       deleteRow(index, rows) {
 		  var isok;
 		$.ajax({
-		           cache: false,
-		           async: false,
-		           type: "DELETE",
-		           data: {  },
-		           url: `http://localhost:8081/bookapi/deletbyid?bookid=${rows[index].bookid}`,
-		           success: function (data) {
-		               isok = data;
-		           }
-		       });
+		           cache: false,
+		           async: false,
+		           type: "DELETE",
+		           data: {  },
+		           url: `http://localhost:8081/bookapi/deletbyid?bookid=${rows[index].bookid}`,
+		           success: function (data) {
+		               isok = data;
+		           }
+		       });
 		if(isok == 1){
 		  this.$message({
 		            message: '书籍已删除',
 		            type: 'success'
 		          })
 		}else if(isok == 0){
-					this.$message.error('书籍删除失败')
+					this.$message.error('书籍删除失败');
 		}
         rows.splice(index, 1);
       },
@@ -172,15 +175,15 @@ methods: {
 	  changeoutb(index, rows){
 		  var isok;
 		  $.ajax({
-		             cache: false,
-		             async: false,
-		             type: "POST",
-		             data: {  },
-		             url: `http://localhost:8081/bookapi/updateoutb?outb=${rows[index].outb}&bookid=${rows[index].bookid}`,
-		             success: function (data) {
+		             cache: false,
+		             async: false,
+		             type: "POST",
+		             data: {  },
+		             url: `http://localhost:8081/bookapi/updateoutb?outb=${rows[index].outb}&bookid=${rows[index].bookid}`,
+		             success: function (data) {
 						isok = data;
-		             }
-		         });
+		             }
+		         });
 		  if(rows[index].outb=="是"){
 			  rows[index].outb="否"
 		  }else if (rows[index].outb=="否"){
@@ -196,6 +199,14 @@ methods: {
 		  }
 	  },
 	  insertnewbook(){
+		if((this.bookid == "") || (this.name == "")){
+			this.$notify.error({
+			    title: '错误',
+			    message: '书籍创建失败，请填写相关信息'
+			});
+			this.dialogVisible1 = false;
+			return;
+		}
 		var outb;
 		if(this.value2){
 			outb = "否"
@@ -204,15 +215,15 @@ methods: {
 		}
 		var isok;
 		$.ajax({
-		           cache: false,
-		           async: false,
-		           type: "POST",
-		           data: {  },
-		           url: `http://localhost:8081/bookapi/insertnewbook?bookid=${this.bookid}&name=${this.name}&outb=${outb}`,
-		           success: function (data) {
+		           cache: false,
+		           async: false,
+		           type: "POST",
+		           data: {  },
+		           url: `http://localhost:8081/bookapi/insertnewbook?bookid=${this.bookid}&name=${this.name}&outb=${outb}`,
+		           success: function (data) {
 								isok = data;
-		           }
-		       });
+		           }
+		       });
 		this.tableData=makebook(getAllBook());
 		this.dialogVisible1 = false;
 		if(isok == 1){
